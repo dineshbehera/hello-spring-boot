@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-spring-boot
+  namespace: development
+spec:
+  selector:
+    matchLabels:
+      app: hello-spring-boot
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: hello-spring-boot
+    spec:
+      containers:
+      - name: hello-spring-boot
+        image: dineshbehera/hello-spring-boot
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-spring-boot
+  namespace: development
+spec:
+  selector:
+    app: hello-spring-boot
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
